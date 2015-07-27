@@ -23,6 +23,7 @@
     "postcss-assets": "^2.1.2",
     "postcss-import": "^6.1.1",
     "rimraf": "^2.4.1",
-    "through2": "^2.0.0"
+    "through2": "^2.0.0",
+    "walk": "^2.3.9"
   }
 }

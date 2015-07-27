@@ -8,7 +8,8 @@ var Future = require('bluebird');
 module.exports = {
   rewriteCss: rewriteCss,
   transformStream: transformStream,
-  readAndTransform: readAndTransform
+  readAndTransform: readAndTransform,
+  readAndWrite: readAndWrite
 };
 
 function rewriteCss(filePath, css) {
@@ -27,6 +28,13 @@ function rewriteCss(filePath, css) {
 function readAndTransform(filePath) {
   return Future.promisify(fs.readFile)(filePath)
   .then(rewriteCss.bind(null, filePath));
+}
+
+function readAndWrite(filePath, targetPath) {
+  return readAndTransform(filePath)
+  .then(function(css) {
+    return Future.promisify(fs.writeFile)(targetPath, css);
+  });
 }
 
 function transformStream(cssDir) {

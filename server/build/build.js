@@ -1,6 +1,9 @@
+/* Project specific build functions */
+
 var css = require('./css-compile');
 var js = require('./js-compile');
 var elm = require('./elm-compile');
+var html = require('./html-compile');
 var path = require('path');
 var Future = require('bluebird');
 var fs = require('fs');
@@ -38,19 +41,11 @@ function buildJs(dirConfig) {
 
 function buildHtml(dirConfig) {
   return function() {
-    var htmlPath = path.join(dirConfig.frontend, 'index.tmpl');
-    var coreCssPath = path.join(dirConfig.frontend, 'css', 'core', 'core.css');
-    var htmlDest = path.join(dirConfig.build, 'index.html');
-
-    return Future.all([
-      Future.promisify(fs.readFile)(htmlPath, { encoding: 'utf8' }),
-      css.readAndTransform(coreCssPath)
-    ])
-    .spread(function(htmlTemplate, compiledCss) {
-      var compiledTemplate = htmlTemplate.replace('{{core-css}}', compiledCss);
-
-      return Future.promisify(fs.writeFile)(htmlDest, compiledTemplate);
-    });
+    return html.compile(
+      path.join(dirConfig.frontend, 'index.tmpl'),
+      path.join(dirConfig.frontend, 'css', 'core', 'core.css'),
+      path.join(dirConfig.build, 'index.html')
+    );
   };
 }
 
