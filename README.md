@@ -62,11 +62,8 @@ Assets that need to be loaded before the page is loaded should be in this folder
 also. The css is processed with the same toolchain used for your other modules
 but you should inline any assets you are using here.
 
-`./frontend/elm` is where your Elm code goes. Fill it up! You probably shouldn't
-use `Native` bindings in a frontend app, but I consider it possible that you
-might need to. An example is provided to show how native bindings work.
-`main.elm` is the entrypoint to your app. The compiled elm code is minified in
-production.
+`./frontend/elm` is where your Elm code goes. Fill it up! `main.elm` is the
+entry-point to your app. The compiled elm code is minified in production.
 
 `./frontend/js` - all your regular JS goes here. Most importantly this is where
 you call into your elm code to start the app. Browserify is used to bundle your

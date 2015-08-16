@@ -1,3 +1,3 @@
 window.onload = function() {
-  Elm.fullscreen(Elm.App, {});
+  window.Elm.fullscreen(window.Elm.App, {});
 };
