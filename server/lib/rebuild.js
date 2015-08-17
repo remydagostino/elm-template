@@ -11,6 +11,20 @@ module.exports = {
   combineWatchers: combineWatchers
 };
 
+/**
+ * Creates a stateful express middleware that blocks requests to a resource
+ * while compiling source files.
+ *
+ * @param  {Function} fileFinder Accepts no arguments. Returns a promise
+ *                               containing all files that have changed since it
+ *                               was last called.
+ * @param  {Function} rebuildFn  A function which accepts an array of changed
+ *                               files and returns a promise that resolves when
+ *                               the rebuild has completed.
+ * @param  {Function} log        A logging function which accepts a log level
+ *                               string and any number of message arguments.
+ * @return {Function}            Express.js middleware
+ */
 function rebuilder(fileFinder, rebuildFn, log) {
   var lastPromise = Future.resolve();
 

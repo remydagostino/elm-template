@@ -37,12 +37,7 @@ function rebuilder(config) {
 
   return rebuild.rebuilder(
     rebuild.dirWatcher(jsDir, 'Rebuilding JS', config.log),
-    function(files) {
-      return compile(
-        path.join(jsDir, 'main.js'),
-        path.join(config.build, 'index.js')
-      );
-    },
+    build.bind(null, config),
     config.log
   );
 }
