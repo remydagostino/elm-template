@@ -1,7 +1,9 @@
-var Future = require('bluebird');
 var elmCompiler = require('node-elm-compiler');
+var fs = require('fs');
+var Future = require('bluebird');
 var path = require('path');
 var rebuild = require('../lib/rebuild');
+var uglify = require('uglify-js');
 
 module.exports = {
   build: build,
@@ -9,10 +11,21 @@ module.exports = {
 };
 
 function build(config) {
-  return compile(
-    path.join(config.frontend, 'elm', 'main.elm'),
-    path.join(config.build, 'elm.js')
-  );
+  var elmMainFile = path.join(config.frontend, 'elm', 'main.elm');
+  var targetFile = path.join(config.build, 'elm.js');
+  var uncompressedTarget = path.join(config.build, 'elm-uncompressed.js');
+
+  if (config.devBuild) {
+    return compile(elmMainFile, targetFile);
+  } else {
+    return compile(elmMainFile, uncompressedTarget)
+    .then(function() {
+      return Future.promisify(fs.writeFile)(
+        targetFile,
+        uglify.minify(uncompressedTarget).code
+      );
+    });
+  }
 }
 
 function compile(src, output) {

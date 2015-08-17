@@ -1,3 +1,4 @@
+/*eslint-env node */
 /*global __dirname */
 
 var _ = require('lodash');
@@ -15,7 +16,7 @@ var config = {
   log: function(level) {
     console[level].apply(console, _.rest(arguments)); //eslint-disable-line
   },
-  devMode: true
+  devMode: process.env.STAGE === 'development'
 };
 
 var app = express();
