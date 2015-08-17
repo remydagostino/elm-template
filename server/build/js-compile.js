@@ -3,17 +3,20 @@ var fs = require('fs');
 var Future = require('bluebird');
 var path = require('path');
 var rebuild = require('../lib/rebuild');
+var through = require('through');
+var uglify = require('uglify-js');
 
 module.exports = {
   build: build,
   rebuilder: rebuilder
 };
 
-function compile(mainJs, outputFile) {
+function compile(mainJs, outputFile, devBuild) {
   var deferred = Future.pending();
 
   browserify(mainJs)
   .bundle()
+  .pipe(devBuild ? through() : writeMinified())
   .pipe(fs.createWriteStream(outputFile))
   .on('error', function(e) {
     deferred.reject(e);
@@ -25,10 +28,30 @@ function compile(mainJs, outputFile) {
   return deferred.promise;
 }
 
+function writeMinified() {
+  var content = '';
+
+  return through(
+    function(data) {
+      content += data;
+    },
+    function() {
+      try {
+        this.queue(uglify.minify(content, { fromString: true}).code);
+      } catch (ex) {
+        this.emit('error', ex);
+      }
+
+      this.queue(null);
+    }
+  );
+}
+
 function build(config) {
   return compile(
     path.join(config.frontend, 'js', 'main.js'),
-    path.join(config.build, 'index.js')
+    path.join(config.build, 'index.js'),
+    config.devBuild
   );
 }
 

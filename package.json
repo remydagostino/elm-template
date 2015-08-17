@@ -23,7 +23,9 @@
     "postcss-assets": "2.1.2",
     "postcss-import": "6.1.1",
     "rimraf": "2.4.1",
+    "through": "2.3.8",
     "through2": "2.0.0",
+    "uglify-js": "2.4.24",
     "walk": "2.3.9"
   }
 }

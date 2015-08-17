@@ -4,7 +4,7 @@
 - [ ] Postcss plugins
 - [x] Automatic rebuild in dev mode
 - [ ] Production build
-- [ ] Refactor /server/build to colocate rebulid/dev/production builds
+- [x] Refactor /server/build to colocate rebulid/dev/production builds
 - [ ] Elm test runner integration
 - [ ] Heroku deployment
 - [ ] Https support
