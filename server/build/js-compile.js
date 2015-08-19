@@ -1,4 +1,5 @@
 var browserify = require('browserify');
+var copy = require('../lib/copy');
 var fs = require('fs');
 var Future = require('bluebird');
 var path = require('path');
@@ -29,22 +30,11 @@ function compile(mainJs, outputFile, devBuild) {
 }
 
 function writeMinified() {
-  var content = '';
-
-  return through(
-    function(data) {
-      content += data;
-    },
-    function() {
-      try {
-        this.queue(uglify.minify(content, { fromString: true}).code);
-      } catch (ex) {
-        this.emit('error', ex);
-      }
-
-      this.queue(null);
-    }
-  );
+  return copy.rewriteStream(function(content) {
+    return new Future(function(resolve) {
+      resolve(uglify.minify(content, { fromString: true}).code);
+    });
+  });
 }
 
 function build(config) {
