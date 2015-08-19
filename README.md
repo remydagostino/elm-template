@@ -2,7 +2,7 @@
 
 - [x] Development build
 - [x] Automatic rebuild in dev mode
-- [ ] Production build
+- [x] Production build
 - [x] Refactor /server/build to colocate rebulid/dev/production builds
 - [ ] Elm test runner integration
 - [ ] Heroku deployment
@@ -66,8 +66,6 @@ non-trivial to implement however.
 - Dead code elimination. Elm outputs a lot of unused code.
 - Js bundling. Large apps need this so that they can avoid sending down huge
 piles of code for unused features.
-- A better approach to CSS. Either an ability for elm components to load their
-own CSS or a nice library for doing styles inline.
 - Server side rendering. For faster initial page rendering and for exposing your
 website to robots.
 - Some debugging tools would be nice in development mode. A debug toolbar
