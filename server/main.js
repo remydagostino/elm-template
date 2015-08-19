@@ -1,6 +1,7 @@
 /*eslint-env node */
 
 var _ = require('lodash');
+var compression = require('compression');
 var express = require('express');
 var path = require('path');
 var rebuild = require('./build/rebuild');
@@ -26,6 +27,8 @@ if (config.devMode) {
   app.get('/index.js', rebuild.js(config));
   app.get('/elm.js',   rebuild.elm(config));
   app.get('/',         rebuild.index(config));
+} else {
+  app.use(compression());
 }
 
 // Wait until the intial build is done before serving
