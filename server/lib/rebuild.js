@@ -36,7 +36,7 @@ function rebuilder(fileFinder, rebuildFn, log) {
         function() { next(); },
         function(err) {
           log('error', 'Rebuilding failed', err, err.stack);
-          return Future.resolve();
+          res.sendStatus(500);
         }
       );
     });
@@ -83,6 +83,8 @@ function fileWatcher(file, message, log) {
         modtime = Math.max(_.max(_.pluck(files, 'timestamp')), modtime);
         log('log', message);
       }
+
+      return files;
     });
   };
 }

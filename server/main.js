@@ -1,5 +1,4 @@
 /*eslint-env node */
-/*global __dirname */
 
 var _ = require('lodash');
 var express = require('express');
@@ -24,7 +23,6 @@ var app = express();
 // Rebuild on request in dev mode
 if (config.devMode) {
   app.use('/static',   rebuild.assets(config));
-  app.use('/styles',   rebuild.css(config));
   app.get('/index.js', rebuild.js(config));
   app.get('/elm.js',   rebuild.elm(config));
   app.get('/',         rebuild.index(config));
@@ -33,7 +31,6 @@ if (config.devMode) {
 // Wait until the intial build is done before serving
 initialBuild().then(function() {
   app.use('/static',   express.static(path.join(config.build, 'static')));
-  app.use('/styles',   express.static(path.join(config.build, 'styles')));
   app.get('/index.js', serveFile(path.join(config.build, 'index.js')));
   app.get('/elm.js',   serveFile(path.join(config.build, 'elm.js')));
   app.get('/',         serveFile(path.join(config.build, 'index.html')));

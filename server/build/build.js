@@ -14,7 +14,6 @@ function fullBuild(config) {
       [
         require('./elm-compile'),
         require('./asset-compile'),
-        require('./css-compile'),
         require('./js-compile'),
         require('./html-compile')
       ].map(function(resource) {

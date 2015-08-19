@@ -11,26 +11,35 @@ main =
 model = 0
 
 view address model =
-  div [class "main"]
+  div [ ]
     [ paddedSection <| welcomeMessage
     , paddedSection <| counterView address model
     ]
 
 paddedSection child =
-  div [class "main__padded"] [child]
+  div [ ] [child]
 
 welcomeMessage =
-  div [class "welcomeMessage"]
-    [ div [class "welcomeMessage__elmLogo"] [ ]
-    , h1 [class "h1"] [text "Build great things with Elm."]
-    ]
+  div [ ]
+    [ h1 [ ] [text "Build something with Elm."] ]
 
 counterView address model =
-  div []
-    [ button [ onClick address Decrement ] [ text "-" ]
-    , div [] [ text (toString model) ]
-    , button [ onClick address Increment ] [ text "+" ]
-    ]
+  let
+    counterButton action =
+      button
+        [ onClick address action ]
+        [ text <| counterText action ]
+  in
+    div []
+      [ counterButton Increment
+      , div [] [ text (toString model) ]
+      , counterButton Decrement
+      ]
+
+counterText action =
+  case action of
+    Increment -> "+"
+    Decrement -> "-"
 
 type Action = Increment | Decrement
 

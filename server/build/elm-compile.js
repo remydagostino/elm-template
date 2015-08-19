@@ -36,7 +36,9 @@ function compile(src, output) {
     if (exitCode === 0) {
       deferred.resolve();
     } else {
-      deferred.reject(exitCode);
+      deferred.reject({
+        message: 'Elm compiler exited with code: ' + String(exitCode)
+      });
     }
   });
 
