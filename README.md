@@ -1,7 +1,6 @@
 ## WIP!
 
 - [x] Development build
-- [ ] Postcss plugins
 - [x] Automatic rebuild in dev mode
 - [ ] Production build
 - [x] Refactor /server/build to colocate rebulid/dev/production builds
@@ -48,20 +47,6 @@ root.
 under `assets/*`. It is left to you to perform sprite-sheeting and other
 optimizations if you need them.
 
-`./frontend/css/modules` is the css for all the rest of your site. All css is
-processed using [autoprefixer] as well as [postcss-import] and [postcss-assets].
-These files are served from `styles/*`. The default autoprefixer configuration
-is used but you can obviously change this in the server code. If you are going
-to be using stylesheets heavilly in your project you might want to consider
-using a few more postcss plugins.
-
-`./frontend/css/core` contains "above the fold" styles for your app. This should
-only ever contain the minimal amount of css necessary to make your application
-not look horrible while it loads. Only the `core.css` file will be processed.
-Assets that need to be loaded before the page is loaded should be in this folder
-also. The css is processed with the same toolchain used for your other modules
-but you should inline any assets you are using here.
-
 `./frontend/elm` is where your Elm code goes. Fill it up! `main.elm` is the
 entry-point to your app. The compiled elm code is minified in production.
 
@@ -103,6 +88,3 @@ evaluate this project structure for yourself before using it in production.
 [Prometheus]: http://prometheus.io/
 [Elm]: http://elm-lang.org/
 [elm-reactor]: https://github.com/elm-lang/elm-reactor
-[autoprefixer]: https://github.com/postcss/autoprefixer
-[postcss-import]: https://github.com/postcss/postcss-import
-[postcss-assets]: https://github.com/borodean/postcss-assets
