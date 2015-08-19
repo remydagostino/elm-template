@@ -38,7 +38,7 @@ initialBuild().then(function() {
   app.get('/elm.js',   serveFile(path.join(config.build, 'elm.js')));
   app.get('/',         serveFile(path.join(config.build, 'index.html')));
 
-  var server = app.listen(3000, function () {
+  var server = app.listen(process.env.PORT || 3000, function () {
     var host = server.address().address;
     var port = server.address().port;
 
