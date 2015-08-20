@@ -52,9 +52,7 @@ entry-point to your app. The compiled elm code is minified in production.
 
 `./frontend/js` - all your regular JS goes here. Most importantly this is where
 you call into your elm code to start the app. Browserify is used to bundle your
-javascript code and is configured to start with `main.js`. Remember that if you
-want to use Elm ports you will need to add those functions to the global window
-object.
+javascript code and is configured to start with `main.js`.
 
 
 Wishlist
@@ -73,6 +71,8 @@ that allowed you to pause and inspect the state of the application would be
 great but I want to be careful not to duplicate the efforts of the elm-reactor
 folks.
 - Integration with continuous delivery and automated testing frameworks
+- Better testing. At least a nicer web test runner, preferably a test runner
+that runs in the console and watches files.
 
 
 Disclaimer

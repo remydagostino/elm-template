@@ -7,11 +7,12 @@ var uglify = require('uglify-js');
 
 module.exports = {
   build: build,
-  rebuilder: rebuilder
+  rebuilder: rebuilder,
+  serveTests: serveTests
 };
 
 function build(config) {
-  var elmMainFile = path.join(config.frontend, 'elm', 'main.elm');
+  var elmMainFile = path.join(config.frontend, 'elm', 'App.elm');
   var targetFile = path.join(config.build, 'elm.js');
   var uncompressedTarget = path.join(config.build, 'elm-uncompressed.js');
 
@@ -52,10 +53,24 @@ function rebuilder(config) {
     rebuild.dirWatcher(elmDir, 'Rebuilding Elm', config.log),
     function() {
       return compile(
-        path.join(elmDir, 'main.elm'),
+        path.join(elmDir, 'App.elm'),
         path.join(config.build, 'elm.js')
       );
     },
     config.log
   );
+}
+
+function serveTests(config) {
+  var testTarget = path.join(config.build, 'elm-tests.html');
+
+  return function(req, res) {
+    compile(
+      path.join(config.tests, 'elm', 'test-runner.elm'),
+      testTarget
+    ).then(
+      function() { res.sendFile(testTarget); },
+      function() { res.sendStatus(500); }
+    );
+  };
 }

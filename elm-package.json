@@ -4,10 +4,12 @@
     "repository": "https://github.com/remydagostino/elm-seed.git",
     "license": "BSD3",
     "source-directories": [
-        "frontend/elm"
+        "frontend/elm",
+        "tests/elm"
     ],
     "exposed-modules": [],
     "dependencies": {
+        "deadfoxygrandpa/Elm-Test": "1.0.4 <= v < 2.0.0",
         "elm-lang/core": "2.1.0 <= v < 3.0.0",
         "evancz/elm-html": "3.0.0 <= v < 4.0.0",
         "evancz/start-app": "1.0.0 <= v < 2.0.0"
