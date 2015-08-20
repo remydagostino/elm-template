@@ -4,12 +4,13 @@
 - [x] Automatic rebuild in dev mode
 - [x] Production build
 - [x] Refactor /server/build to colocate rebulid/dev/production builds
-- [ ] Elm test runner integration
-- [ ] Heroku deployment
-- [ ] Https support
+- [x] Elm test runner integration
+- [ ] Javascript test runner
 - [ ] Instrumentation using [Prometheus]
 
 ---
+
+![Elm Seed](https://github.com/remydagostino/elm-seed/blob/master/ElmSeedBanner.png)
 
 A starting point for building production-ready [Elm] applications. Ultimately I
 would like to use [elm-reactor] from start to end for building applications in
