@@ -6,7 +6,9 @@
 - [x] Refactor /server/build to colocate rebulid/dev/production builds
 - [x] Elm test runner integration
 - [ ] Javascript test runner
+- [ ] Test deployment to Heroku
 - [ ] Instrumentation using [Prometheus]
+- [ ] Yeoman generator
 
 ---
 
@@ -35,8 +37,10 @@ Getting Started
 -----------------
 
 In development, run `npm install` to install the project's node dependencies.
-Then `npm run-script start-dev` to start the development server. Test your
-production build with `npm run-script start-prod`.
+Then `npm run-script start-dev` to start the development server. Open your web
+browser to http://localhost:3000 to see the beginnings of your elm app. Test
+your production build with `npm run-script start-prod`. While the development
+build is running, access the elm tests by navigating to http://localhost:3000/tests.elm.
 
 `./server` contains the source for a nodejs http server. When the server starts
 it cleans the build and rebuilds all frontend code and assets. During
@@ -54,6 +58,13 @@ entry-point to your app. The compiled elm code is minified in production.
 `./frontend/js` - all your regular JS goes here. Most importantly this is where
 you call into your elm code to start the app. Browserify is used to bundle your
 javascript code and is configured to start with `main.js`.
+
+`./tests/elm` is the place where you put all your frontend elm tests. It is
+suggested that you create a directory structure inside `Test` which mirrors the
+structure of `./frontend/elm` for all the modules you want to test. The test
+runner will be built and served when navigating to `/tests.elm`. Depending on
+your needs, you may need to replace the test runner provided by [ElmTest] with
+something more flexible.
 
 
 Wishlist
@@ -87,3 +98,4 @@ evaluate this project structure for yourself before using it in production.
 [Prometheus]: http://prometheus.io/
 [Elm]: http://elm-lang.org/
 [elm-reactor]: https://github.com/elm-lang/elm-reactor
+[Elm-Test]: http://package.elm-lang.org/packages/deadfoxygrandpa/Elm-Test/1.0.4
