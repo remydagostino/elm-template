@@ -62,9 +62,9 @@ javascript code and is configured to start with `main.js`.
 `./tests/elm` is the place where you put all your frontend elm tests. It is
 suggested that you create a directory structure inside `Test` which mirrors the
 structure of `./frontend/elm` for all the modules you want to test. The test
-runner will be built and served when navigating to `/tests.elm`. Depending on
-your needs, you may need to replace the test runner provided by [Elm-Test] with
-something more flexible.
+runner will be built and served when navigating to `/elm-tests.html`. Depending
+on your needs, you may need to replace the test runner provided by [Elm-Test]
+with something more flexible.
 
 
 Wishlist

@@ -1,13 +1,13 @@
 /*eslint-env node */
 
 var _ = require('lodash');
+var build = require('./build/build');
 var compression = require('compression');
+var elm = require('./build/elm-compile');
 var express = require('express');
+var morgan = require('morgan');
 var path = require('path');
 var rebuild = require('./build/rebuild');
-var Future = require('bluebird');
-var build = require('./build/build');
-var elm = require('./build/elm-compile');
 
 var rootDir = path.join(__dirname, '..');
 var config = {
@@ -25,13 +25,16 @@ var app = express();
 
 // Rebuild on request in dev mode
 if (config.devMode) {
-  app.get('/tests.elm', elm.serveTests(config));
+  app.get('/elm-tests.html', elm.serveTests(config));
+
+  app.use(morgan('dev'));
 
   app.use('/static',   rebuild.assets(config));
   app.get('/index.js', rebuild.js(config));
   app.get('/elm.js',   rebuild.elm(config));
   app.get('/',         rebuild.index(config));
 } else {
+  app.use(morgan('common'));
   app.use(compression());
 }
 
