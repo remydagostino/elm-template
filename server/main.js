@@ -58,7 +58,7 @@ function serveFile(file) {
 
 function initialBuild() {
   if (config.devMode) {
-    return Future.resolve();
+    return build.cleanBuild(config);
   } else {
     return build.fullBuild(config);
   }

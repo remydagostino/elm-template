@@ -1,4 +1,5 @@
 var Future = require('bluebird');
+var path = require('path');
 var fs = require('fs');
 var rimraf = require('rimraf');
 
@@ -28,7 +29,10 @@ function cleanBuild(config) {
   var create = Future.promisify(fs.mkdir);
 
   return destroy(config.build)
-    .then(function() {
-      return create(config.build);
-    });
+  .then(function() {
+    return create(config.build);
+  })
+  .then(function() {
+    return create(path.join(config.build, 'static'));
+  });
 }
