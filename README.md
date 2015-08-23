@@ -5,6 +5,7 @@
 - [x] Production build
 - [x] Refactor /server/build to colocate rebulid/dev/production builds
 - [x] Elm test runner integration
+- [ ] Fix: invalidate cache if build fails
 - [ ] Push Elm compile errors into browser window
 - [ ] Javascript test runner
 - [ ] Test deployment to Heroku
