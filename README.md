@@ -5,8 +5,10 @@
 - [x] Production build
 - [x] Refactor /server/build to colocate rebulid/dev/production builds
 - [x] Elm test runner integration
-- [ ] Fix: invalidate cache if build fails
-- [ ] Push Elm compile errors into browser window
+- [x] Fix: invalidate cache if build fails
+- [ ] Use watchify for incremental JS compiling
+- [x] Push Elm compile errors into browser window
+- [ ] Find a nice way to handle and display elm warnings
 - [ ] Javascript test runner
 - [ ] Test deployment to Heroku
 - [ ] Instrumentation using [Prometheus]

@@ -1,9 +1,14 @@
-var elmCompiler = require('node-elm-compiler');
+/*eslint-env node */
+
+var _ = require('lodash');
+var elmMakePath = require('elm')['elm-make'];
 var fs = require('fs');
 var Future = require('bluebird');
+var jsStringEscape = require('js-string-escape');
 var path = require('path');
-var rebuild = require('../lib/rebuild');
+var spawnChildProcess = require('child_process').spawn;
 var uglify = require('uglify-js');
+
 
 module.exports = {
   build: build,
@@ -31,14 +36,19 @@ function build(config) {
 
 function compile(src, output) {
   var deferred = Future.pending();
+  var errContent = '';
+  var proc = spawnElmCompiler(src, output);
 
-  elmCompiler.compile(src, { output: output, yes: true })
-  .on('close', function(exitCode) {
+  proc.stderr.on('data', function(data) {
+    errContent += data;
+  });
+
+  proc.on('close', function(exitCode) {
     if (exitCode === 0) {
       deferred.resolve();
     } else {
       deferred.reject({
-        message: 'Elm compiler exited with code: ' + String(exitCode)
+        message: errContent
       });
     }
   });
@@ -49,16 +59,30 @@ function compile(src, output) {
 function rebuilder(config) {
   var elmDir = path.join(config.frontend, 'elm');
 
-  return rebuild.rebuilder(
-    rebuild.alwaysRebuild(),
-    function() {
-      return compile(
-        path.join(elmDir, 'App.elm'),
-        path.join(config.build, 'elm.js')
-      );
-    },
-    config.log
-  );
+  return function(req, res, next) {
+    return compile(
+      path.join(elmDir, 'App.elm'),
+      path.join(config.build, 'elm.js')
+    )
+    .then(
+      function() {
+        next();
+      },
+      function(err) {
+        // Handle errors by slapping a the message into the body
+        res.set('Content-Type', 'application/javascript');
+        res.send(errorDumpScript(err.message));
+      }
+    );
+  };
+
+  function errorDumpScript(msg) {
+    var safe = jsStringEscape(msg);
+
+    return (
+      'window.document.body.innerHTML = "<pre>' + safe + '</pre>";'
+    );
+  }
 }
 
 function serveTests(config) {
@@ -73,4 +97,24 @@ function serveTests(config) {
       function() { res.sendStatus(500); }
     );
   };
+}
+
+
+function spawnElmCompiler(source, outputPath) {
+  var processArgs = [
+    source,
+    '--yes',
+    // '--report=json',
+    // '--warn',
+    '--output', outputPath.replace(/ /g, '\\ ')
+  ];
+
+  return spawnChildProcess(
+    elmMakePath,
+    processArgs,
+    {
+      env: _.merge({LANG: 'en_US.UTF-8'}, process.env),
+      stdio: 'pipe'
+    }
+  );
 }
