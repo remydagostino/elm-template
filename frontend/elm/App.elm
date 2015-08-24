@@ -2,8 +2,6 @@ module App where
 
 import Component.Counter as Counter
 import Html exposing (div, h1, button, text)
-import Html.Attributes exposing (class)
-import Html.Events exposing (onClick)
 import StartApp.Simple
 
 main =

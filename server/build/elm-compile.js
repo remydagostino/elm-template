@@ -78,9 +78,17 @@ function rebuilder(config) {
 
   function errorDumpScript(msg) {
     var safe = jsStringEscape(msg);
+    var errorStyles = jsStringEscape([
+      'background: #fff;',
+      'padding: 10px;',
+      'border-top: 5px solid red;'
+    ].join(' '));
 
     return (
-      'window.document.body.innerHTML = "<pre>' + safe + '</pre>";'
+      'window.document.body.innerHTML = ' +
+      '"<pre style=\\"' + errorStyles + ' \\">' +
+        safe +
+      '</pre>";'
     );
   }
 }

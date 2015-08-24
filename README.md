@@ -13,6 +13,7 @@
 - [ ] Test deployment to Heroku
 - [ ] Instrumentation using [Prometheus]
 - [ ] Yeoman generator
+- [ ] Evaluate what can be extracted from this repo
 
 ---
 
