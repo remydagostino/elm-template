@@ -8,16 +8,16 @@ module.exports = {
 
   dirWatcher: dirWatcher,
   fileWatcher: fileWatcher,
-  combineWatchers: combineWatchers
+  alwaysRebuild: alwaysRebuild
 };
 
 /**
  * Creates a stateful express middleware that blocks requests to a resource
  * while compiling source files.
  *
- * @param  {Function} fileFinder Accepts no arguments. Returns a promise
- *                               containing all files that have changed since it
- *                               was last called.
+ * @param  {Function} fileFinder Accepts a single argument of the last
+ *                               successful build. Returns a promise
+ *                               containing all files that have changed since.
  * @param  {Function} rebuildFn  A function which accepts an array of changed
  *                               files and returns a promise that resolves when
  *                               the rebuild has completed.
@@ -27,10 +27,11 @@ module.exports = {
  */
 function rebuilder(fileFinder, rebuildFn, log) {
   var lastPromise = Future.resolve();
+  var modtime = 0;
 
   return function(req, res, next) {
     lastPromise = lastPromise.then(function() {
-      return fileFinder()
+      return fileFinder(modtime)
       .then(rebuildChangedFiles)
       .then(
         function() { next(); },
@@ -42,27 +43,41 @@ function rebuilder(fileFinder, rebuildFn, log) {
     });
   };
 
-  function rebuildChangedFiles(files) {
-    if (files.length > 0) {
-      return rebuildFn(files);
+  function rebuildChangedFiles(changes) {
+    if (changes.modtime > modtime) {
+      modtime = changes.modtime;
+      return rebuildFn(changes.files);
     } else {
       return Future.resolve();
     }
   }
 }
 
-function dirWatcher(dir, message, log) {
-  var modtime = 0;
 
+function alwaysRebuild() {
   return function() {
-    return watch.getModifiedInDir(dir, modtime)
+    return Future.resolve({
+      files: [],
+      modtime: Date.now()
+    });
+  };
+}
+
+
+function dirWatcher(dir, message, log) {
+  return function(lastModtime) {
+    return watch.getModifiedInDir(dir, lastModtime)
     .then(function(files) {
       if (files.length > 0) {
-        modtime = Math.max(_.max(_.pluck(files, 'timestamp')), modtime);
         log('log', message + ': ', relativePaths(files));
       }
 
-      return files;
+      return {
+        files: files,
+        modtime: files.length > 0
+          ? _.max(_.pluck(files, 'timestamp'))
+          : lastModtime
+      };
     });
   };
 
@@ -73,27 +88,21 @@ function dirWatcher(dir, message, log) {
   }
 }
 
-function fileWatcher(file, message, log) {
-  var modtime = 0;
 
-  return function() {
-    return watch.getModifiedFile(file, modtime)
+function fileWatcher(file, message, log) {
+  return function(lastModtime) {
+    return watch.getModifiedFile(file, lastModtime)
     .then(function(files) {
       if (files.length > 0) {
-        modtime = Math.max(_.max(_.pluck(files, 'timestamp')), modtime);
         log('log', message);
       }
 
-      return files;
-    });
-  };
-}
-
-function combineWatchers(watchers) {
-  return function() {
-    return Future.all(_.invoke(watchers, 'call'))
-    .then(function(fileLists) {
-      return _.flatten(fileLists);
+      return {
+        files: files,
+        modtime: files.length > 0
+          ? _.max(_.pluck(files, 'timestamp'))
+          : lastModtime
+      };
     });
   };
 }

@@ -50,7 +50,7 @@ function rebuilder(config) {
   var elmDir = path.join(config.frontend, 'elm');
 
   return rebuild.rebuilder(
-    rebuild.dirWatcher(elmDir, 'Rebuilding Elm', config.log),
+    rebuild.alwaysRebuild(),
     function() {
       return compile(
         path.join(elmDir, 'App.elm'),

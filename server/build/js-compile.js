@@ -46,10 +46,8 @@ function build(config) {
 }
 
 function rebuilder(config) {
-  var jsDir = path.join(config.frontend, 'js');
-
   return rebuild.rebuilder(
-    rebuild.dirWatcher(jsDir, 'Rebuilding JS', config.log),
+    rebuild.alwaysRebuild(),
     build.bind(null, config),
     config.log
   );
