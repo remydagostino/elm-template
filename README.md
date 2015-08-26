@@ -17,8 +17,6 @@
 
 ---
 
-![Elm Seed](https://github.com/remydagostino/elm-seed/blob/master/ElmSeedBanner.png)
-
 A starting point for building production-ready [Elm] applications. Ultimately I
 would like to use [elm-reactor] from start to end for building applications in
 Elm however it looks like we won't get there for a while yet.
